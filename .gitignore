@@ -2625,3 +2625,4 @@ tcl/tcl8.6/http1.0/http.tcl
 tcl/tcl8.6/history.tcl
 tcl/tcl8.6/clock.tcl
 tcl/tcl8.6/auto.tcl
+*.pyc
