@@ -69,23 +69,37 @@ def main():
                             min_link = e
                     print("{} -> {}".format(min_link.split('/')[2],min))
                     data["{} {} {} {}GB".format(a,b,c,d)] = [min,min_link]
+    comp(data)
 
+# test_data = {"Macbook AIR 2019 Space grey 128GB": [4900, "https://www.x-kom.pl/p/506277-notebook-laptop-133-apple-macbook-air-i5-8gb-128-uhd-617-mac-os-space-grey.html"], "Macbook AIR 2019 Space grey 256GB": [5649, "https://www.x-kom.pl/p/506278-notebook-laptop-133-apple-macbook-air-i5-8gb-256-uhd-617-mac-os-space-grey.html"], "Macbook AIR 2019 Silver 128GB": [4999, "https://www.morele.net/laptop-apple-macbook-air-13-3-2019-srebrny-mvfk2ze-a-6116788/"], "Macbook AIR 2019 Silver 256GB": [5097, "https://www.mediamarkt.pl/komputery-i-tablety/laptop-apple-macbook-air-13-retina-i5-8gb-256gb-ssd-macos-srebrny-mrec2ze-a"], "Macbook PRO 2019 Space grey 128GB": [5699, "https://www.euro.com.pl/laptopy-i-netbooki/apple-laptop-mbp-tb-i5-8gb-128ssd-space-grey.bhtml"], "Macbook PRO 2019 Silver 128GB": [5649, "https://www.euro.com.pl/laptopy-i-netbooki/apple-laptop-mbp-tb-i5-8gb-128ssd-silver.bhtml"], "Macbook PRO 2017 Space grey 128GB": [4797, "https://www.mediamarkt.pl/komputery-i-tablety/laptop-apple-macbook-pro-13-3-i5-8gb-128gb-ssd-iris-plus-640-macos-srebrny-mpxr2ze-a"], "Macbook PRO 2017 Silver 128GB": [4797, "https://www.mediamarkt.pl/komputery-i-tablety/laptop-apple-macbook-pro-13-3-i5-8gb-128gb-ssd-iris-plus-640-macos-gwiezdna-szarosc-mpxq2ze-a"], "Macbook PRO 2017 Silver 256GB": [5599, "https://www.euro.com.pl/laptopy-i-netbooki/apple-macbook-pro-13-13-3-intel-core-i5-7360u-8gb-ram-256gb-dysk-os-x-sierra.bhtml"]}
+# test_comp = {"Macbook AIR 2019 Space grey 128GB": [4900, "https://www.x-kom.pl/p/506277-notebook-laptop-133-apple-macbook-air-i5-8gb-128-uhd-617-mac-os-space-grey.html"],"Macbook AIR 2019 Space grey 124GB": [41230, "https://www.x-kom.pl/p/506277-notebook-laptop-133-apple-macbook-air-i5-8gb-128-uhd-617-mac-os-space-grey.html"]}
+
+def comp(data):
     with open('prices.json','r') as file:
         json_data = json.loads(file.read())
-        different = False
+        lower = False
+        higher = False
         body = {}
         for item in json_data:
             if(data[item][0] < json_data[item][0]):
                 body[item] = [json_data[item][0],data[item][0],data[item][1]]
-                different = True
-        if(different):
-            print("Different price")
+                lower = True
+            elif(data[item][0] > json_data[item][0]):
+                body[item] = [data[item][0],json_data[item][0],data[item][1]]
+                higher = True
+        if(lower):
+            print("Lower price")
 
             with open('prices.json','w') as file:
                 json.dump(data,file)
 
             send_mail(body)
             print("Update completed")
+        elif(higher):
+            print("Higher price")
+
+            with open('prices.json','w') as file:
+                json.dump(data,file)
         else:
             print("No changes")
 
