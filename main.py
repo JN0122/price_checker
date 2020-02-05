@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from smtp import send_mail
 
 header = {"User-agent": "Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 "}
 
@@ -51,24 +52,24 @@ def check_price(link):
     except:
         print("{}:Unavalable".format(link))
 
-items()
-# link = list["Macbook AIR"]["2019"]["Space grey"]["128"][0]
-data = {}
-for a in list:
-    for b in list[a]:
-        for c in list[a][b]:
-            for d in list[a][b][c]:
-                min = 10000
-                print("{} {} {} {}GB".format(a,b,c,d))
-                for e in list[a][b][c][d]:
-                    check_price(e)
-                    if(min>price):
-                        min = price
-                        min_link = e
-                print("{} -> {}".format(min_link.split('/')[2],min))
-                data["{} {} {} {}GB".format(a,b,c,d)] = [min,min_link]
+def main():
+    items()
+    # link = list["Macbook AIR"]["2019"]["Space grey"]["128"][0]
+    data = {}
+    for a in list:
+        for b in list[a]:
+            for c in list[a][b]:
+                for d in list[a][b][c]:
+                    min = 10000
+                    print("{} {} {} {}GB".format(a,b,c,d))
+                    for e in list[a][b][c][d]:
+                        check_price(e)
+                        if(min>price):
+                            min = price
+                            min_link = e
+                    print("{} -> {}".format(min_link.split('/')[2],min))
+                    data["{} {} {} {}GB".format(a,b,c,d)] = [min,min_link]
 
-try:
     with open('prices.json','r') as file:
         json_data = json.loads(file.read())
         different = False
@@ -79,11 +80,14 @@ try:
                 different = True
         if(different):
             print("Different price")
+
             with open('prices.json','w') as file:
                 json.dump(data,file)
+
+            send_mail(body)
             print("Update completed")
         else:
             print("No changes")
-except:
-    with open('prices.json','w') as file:
-        json.dump(data,file)
+
+if __name__ == '__main__':
+    main()
