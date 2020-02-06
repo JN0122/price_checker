@@ -4,6 +4,7 @@ import json
 from smtp import send_mail
 
 header = {"User-agent": "Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 "}
+euro = 4.3
 
 def items():
     try:
@@ -34,7 +35,7 @@ def check_price(link):
         elif(site_url == 'www.mediamarkt.pl'):
             price = int(site_content.find(attrs={'itemprop':'price'}).get_text())
         elif(site_url == 'www.empik.com'):
-            price = int(site_content.find(attrs={'class':'productPriceInfo__price ta-price withoutLpPromo'}).get_text().split(','," ")[0].strip())
+            price = int(site_content.find(attrs={'class':'productPriceInfo__price ta-price withoutLpPromo'}).get_text().split(",")[0].strip())
         elif(site_url == 'www.morele.net'):
             try:
                 price = int(site_content.find('div','price-new').get_text().split(',')[0].replace(" ",''))
@@ -45,12 +46,14 @@ def check_price(link):
             price = site_content.find('div','price-normal selenium-price-normal').get_text()
             price = int(''.join([n for n in price if n.isdigit()]))
         elif(site_url == 'www.mediaexpert.pl'):
-            price = int(site_content.find('span','a-price_price').get_text().replace(' ',''))
+            price = int(site_content.find('span','a-price_price').findNext('span','a-price_price').get_text().replace(" ",""))
+        elif(site_url == 'www.amazon.de'):
+            price = int(site_content.find('span','a-size-medium a-color-price priceBlockBuyingPriceString').get_text().split(',')[0].replace(".","")) * euro
         else:
             print("Site not supported: "+ site_url)
         # print("{} -> {}".format(link.split('/')[2],price))
     except:
-        print("{}:Unavalable".format(link))
+        print(link)
 
 def main():
     items()
