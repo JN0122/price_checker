@@ -4,7 +4,7 @@ import json
 from smtp import send_mail
 
 header = {"User-agent": "Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 "}
-euro = 4.3
+euro = 4.25
 
 def items():
     try:
