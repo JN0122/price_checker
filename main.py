@@ -94,7 +94,7 @@ def comp(data):
             print("Lower price")
 
             with open('prices.json','w') as file:
-                json.dump(data,file)
+                json.dump(data,file, indent=4, sort_keys=True)
 
             send_mail(body)
             print("Update completed")
@@ -102,7 +102,7 @@ def comp(data):
             print("Higher price")
 
             with open('prices.json','w') as file:
-                json.dump(data,file)
+                json.dump(data,file, indent=4, sort_keys=True)
         else:
             print("No changes")
 
