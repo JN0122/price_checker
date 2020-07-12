@@ -15,7 +15,7 @@ def send_mail(msg):
             server.starttls()
             server.login(config["email"],config["password"])
             print("Login success")
-            server.sendmail(config["email"],"xxkubanxx@gmail.com",fullmsg)
+            server.sendmail(config["email"],"adres mailowy",fullmsg)
             print("Mail sent")
     else:
         print("Arg must be dict type")
